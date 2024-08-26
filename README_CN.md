@@ -1,6 +1,6 @@
 ## Termux-Linux
 
-**概述** | [English](README.md)
+**简体中文** | [English](README.md)
 
 此脚本使您能够使用 LXC 容器在 Termux 上运行各种 Linux 发行版。它支持 Alpine、Arch Linux、Ubuntu、Kali、CentOS、Debian、Fedora 等发行版。 脚本旨在与 LXC 镜像配合使用，如果无法使用 root 权限，还可以使用 `proot` termux run lxc-images (alpine、archlinux、ubuntu、kali、centos、debian、fedora...)。
 
