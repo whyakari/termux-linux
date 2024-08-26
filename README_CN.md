@@ -11,23 +11,39 @@
 - **广泛的发行版支持:** 可用镜像包括 Alpine、Arch Linux、Ubuntu、Kali、CentOS、Debian、Fedora 等。
 - **自定义镜像源:** 使用来自 [清华大学镜像](https://mirrors.tuna.tsinghua.edu.cn/lxc-images/images/) 的镜像。
 
------
+> **警告：目前有两种安装方式：**  一种**需要 root 权限**，另一种**无需 root 权限**！
 
-## 目前有两种方法：一种需要 root 权限，另一种不需要！
+## ⚠️ 指南：无需 root 权限安装 Linux 发行版 
 
-**无需 root 权限的使用说明**
+### 如何**无需 root 权限**安装 Linux 发行版
 
-1. 下载 `proot-linux.sh` 并使用以下命令在 Termux 中执行它：
+<details>
+<summary>展开查看</summary>
+
+1. 下载 proot-linux.sh 脚本并使用 Termux 执行以下命令：
 
 ```bash
-bash proot-linux.sh
+chmod +x proot-linux.sh && ./proot-linux.sh
 ```
 
-> 按照终端中的提示选择 Linux 发行版和版本。您可以直接输入清华镜像中可用的发行版和版本名称（例如，alpine edge）。
+> 按照终端提示选择 Linux 发行版和版本。可以直接输入清华镜像源可用的发行版名称和版本号（例如：alpine edge）。
 
-> 等待下载完成，然后按照说明运行相应的启动脚本。
+> 等待下载完成，然后按照提示运行相应的启动脚本。
 
------
+</details>
+
+### 如何**使用 root 权限**安装 Linux 发行版
+
+<details>
+<summary>展开查看</summary>
+
+```bash
+pkg i tsu -y
+tsu
+chmod +x lxc-linux.sh && ./lxc-linux.sh
+```
+
+</details>
 
 **好的，** 但我该如何选择？
 
