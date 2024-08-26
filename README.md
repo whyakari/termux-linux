@@ -13,16 +13,33 @@ termux run lxc-images (alpine, archlinux, ubuntu, kali, centos, debian, fedora..
 
 -----
 
-## Currently, there are two methods: with root and without!
+> ⚠️ Currently, there are two methods: with **root** and **without**!
 
-Usage Instructions **without root**
+### Usage Instructions **without root**
+<details>
+<summary>Show</summary>
+
 1. Download proot-linux.sh and execute it in Termux with the command:
 ```bash
-bash proot-linux.sh
+chmod +x proot-linux.sh && ./proot-linux.sh
 ```
 > Follow the prompts in the terminal to select the Linux distribution and version. You can directly enter the name of the distribution and version available in the Tsinghua mirror (e.g., alpine edge).
 
 > Wait for the download to complete and follow the instructions to run the corresponding startup script.
+
+</details>
+
+### Usage Instructions **ROOT**
+<details>
+<summary>Show</summary>
+
+```bash
+pkg i tsu -y
+tsu
+chmod +x lxc-linux.sh && ./lxc-linux.sh
+```
+
+</details>
 
 -----
 
