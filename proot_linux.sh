@@ -7,259 +7,258 @@ qemu_command=""
 proot_command="proot"
 
 if [ ! -d ~/storage ] && [ -x "termux-setup-storage" ]; then
-	termux-setup-storage
+        termux-setup-storage
 fi
 if [ -x "$(command -v apt)" ]; then
-	if [ ! -x "$(command -v proot)" ] || [ ! -x "$(command -v wget)" ] || [ ! -x "$(command -v tar)" ]; then
-		apt update && apt upgrade -y &&
-			apt install -y tar proot wget
-	fi
+        if [ ! -x "$(command -v proot)" ] || [ ! -x "$(command -v wget)" ] || [ ! -x "$(command -v tar)" ]; then
+                apt update && apt upgrade -y &&
+                        apt install -y tar proot wget
+        fi
 fi
 
 case $(uname -m) in
 aarch64)
-	arch="arm64"
-	;;
+        arch="arm64"
+        ;;
 arm)
-	arch="armhf"
-	;;
+        arch="armhf"
+        ;;
 amd64)
-	arch="amd64"
-	;;
+        arch="amd64"
+        ;;
 x86_64)
-	arch="amd64"
-	;;
+        arch="amd64"
+        ;;
 *)
-	echo "系统架构不支持"
-	exit 1
-	;;
+        echo "System architecture not supported"
+        exit 1
+        ;;
 esac
 
 if [ ! -x "$(command -v proot)" ]; then
-	curl -o proot https://ghproxy.com/https://github.com/proot-me/proot/releases/download/v5.3.0/proot-v5.3.0-${arch}-static
-	chmod 755 proot
-	proot_command="$(pwd)/proot"
-        echo "使用静态 proot 文件."
+        curl -o proot https://ghproxy.com/https://github.com/proot-me/proot/releases/download/v5.3.0/proot-v5.3.0-${arch}-static
+        chmod 755 proot
+        proot_command="$(pwd)/proot"
+        echo "Using static proot file."
 
 fi
 
 echo "********************************"
-echo "   请选择安装的系统架构   "
-echo "   aarch64 请输入：1"
-echo "   armhf 请输入：2"
-echo "   x86   请输入：3"
-echo "   amd64 请输入：4"
-echo "   其它 输入平台名称 （如："
-echo "   默认使用本机架构)"
+echo "   Please select the system architecture to install"
+echo "   For aarch64 enter: 1"
+echo "   For armhf enter: 2"
+echo "   For x86 enter: 3"
+echo "   For amd64 enter: 4"
+echo "   For other, enter the platform name (e.g.,"
+echo "   Defaults to using local architecture)"
 echo "********************************"
-read -p "请输入:" charch
+read -p "Enter your choice:" charch
 case $charch in
 "1")
-	newarch="arm64"
-	echo $newarch
-	qemu_user="qemu-aarch64"
-	;;
+        newarch="arm64"
+        echo $newarch
+        qemu_user="qemu-aarch64"
+        ;;
 
 "2")
-	newarch="armhf"
-	echo $newarch
-	qemu_user="qemu-arm"
-	;;
+        newarch="armhf"
+        echo $newarch
+        qemu_user="qemu-arm"
+        ;;
 "3")
-	newarch="i386"
-	echo $newarch
-	qemu_user="qemu-i386"
-	;;
+        newarch="i386"
+        echo $newarch
+        qemu_user="qemu-i386"
+        ;;
 "4")
-	newarch="amd64"
-	echo $newarch
-	qemu_user="qemu-x86_64"
-	;;
+        newarch="amd64"
+        echo $newarch
+        qemu_user="qemu-x86_64"
+        ;;
 "")
-	newarch=$arch
-	echo $newarch
-	;;
+        newarch=$arch
+        echo $newarch
+        ;;
 *)
-	newarch=$charch
-	echo $newarch
-	qemu_user="qemu-$newarch"
-	;;
+        newarch=$charch
+        echo $newarch
+        qemu_user="qemu-$newarch"
+        ;;
 esac
 echo "********************************"
-echo "   请选择安装的Linux 发行版  "
-echo "   debian 请输入：1"
-echo "   ubuntu 请输入：2"
-echo "   kali   请输入：3"
-echo "   fedora 请输入：4"
-echo "   其它 输入发行版名称 （如："
-echo "   archlinux、alpine、centos...)"
+echo "   Please select the Linux distribution to install"
+echo "   For debian enter: 1"
+echo "   For ubuntu enter: 2"
+echo "   For kali enter: 3"
+echo "   For fedora enter: 4"
+echo "   For other, enter the distribution name (e.g.,"
+echo "   archlinux, alpine, centos...)"
 echo "********************************"
-read -p "请输入:" name
+read -p "Enter your choice:" name
 case $name in
 "1")
-	linux="debian"
-	echo "请选择$linux版本:"
-	echo "bullseye  输入：1"
-	echo "buster    输入：2"
-	echo "sid       输入：3"
-	echo "其它版本请输入对应名称"
-	read -p "请输入:" banben
-	case $banben in
-	"1")
-		linux_ver="bullseye"
-		echo $linux_ver
-		;;
-	"2")
-		linux_ver="buster"
-		echo $linux_ver
-		;;
-	"3")
-		linux_ver="sid"
-		echo $linux_ver
-		;;
-	*)
-		linux_ver=$banben
-		echo $linux_ver
-		;;
-	esac
-	;;
+        linux="debian"
+        echo "Please select $linux version:"
+        echo "bullseye  enter: 1"
+        echo "buster    enter: 2"
+        echo "sid       enter: 3"
+        echo "For other versions, enter the corresponding name"
+        read -p "Enter your choice:" banben
+        case $banben in
+        "1")
+                linux_ver="bullseye"
+                echo $linux_ver
+                ;;
+        "2")
+                linux_ver="buster"
+                echo $linux_ver
+                ;;
+        "3")
+                linux_ver="sid"
+                echo $linux_ver
+                ;;
+        *)
+                linux_ver=$banben
+                echo $linux_ver
+                ;;
+        esac
+        ;;
 "2")
-	linux="ubuntu"
-	echo $linux
-	echo "请选择$linux版本:"
-	echo "bionic    输入：1"
-	echo "focal     输入：2"
-	echo "xenial    输入：3"
-	echo "其它版本请输入对应名称"
-	read -p "请输入:" banben
-	case $banben in
-	"1")
-		linux_ver="bionic"
-		echo $linux_ver
-		;;
-	"2")
-		linux_ver="focal"
-		echo $linux_ver
-		;;
-	"3")
-		linux_ver="xenial"
-		echo $linux_ver
-		;;
-	*)
-		linux_ver=$banben
-		echo $linux_ver
-		;;
-	esac
-	;;
+        linux="ubuntu"
+        echo $linux
+        echo "Please select $linux version:"
+        echo "bionic    enter: 1"
+        echo "focal     enter: 2"
+        echo "xenial    enter: 3"
+        echo "For other versions, enter the corresponding name"
+        read -p "Enter your choice:" banben
+        case $banben in
+        "1")
+                linux_ver="bionic"
+                echo $linux_ver
+                ;;
+        "2")
+                linux_ver="focal"
+                echo $linux_ver
+                ;;
+        "3")
+                linux_ver="xenial"
+                echo $linux_ver
+                ;;
+        *)
+                linux_ver=$banben
+                echo $linux_ver
+                ;;
+        esac
+        ;;
 "3")
-	linux="kali"
-	echo $linux
-	linux_ver="current"
-	;;
+        linux="kali"
+        echo $linux
+        linux_ver="current"
+        ;;
 "4")
-	linux="fedora"
-	echo $linux
-	echo "请选择$linux版本:"
-	echo "30        输入：1"
-	echo "31        输入：2"
-	echo "32        输入：3"
-	echo "其它版本请输入对应名称"
-	read -p "请输入:" banben
-	case $banben in
-	"1")
-		linux_ver="30"
-		echo $linux_ver
-		;;
-	"2")
-		linux_ver="31"
-		echo $linux_ver
-		;;
-	"3")
-		linux_ver="32"
-		echo $linux_ver
-		;;
-	*)
-		linux_ver=$banben
-		echo $linux_ver
-		;;
-	esac
-	;;
+        linux="fedora"
+        echo $linux
+        echo "Please select $linux version:"
+        echo "30        enter: 1"
+        echo "31        enter: 2"
+        echo "32        enter: 3"
+        echo "For other versions, enter the corresponding name"
+        read -p "Enter your choice:" banben
+        case $banben in
+        "1")
+                linux_ver="30"
+                echo $linux_ver
+                ;;
+        "2")
+                linux_ver="31"
+                echo $linux_ver
+                ;;
+        "3")
+                linux_ver="32"
+                echo $linux_ver
+                ;;
+        *)
+                linux_ver=$banben
+                echo $linux_ver
+                ;;
+        esac
+        ;;
 *)
-	linux=$name
-	echo $linux
-	read -p "请输入系统版本:" banben
-	linux_ver=$banben
-	;;
+        linux=$name
+        echo $linux
+        read -p "Enter the system version:" banben
+        linux_ver=$banben
+        ;;
 esac
 
 if [ $newarch != $arch ]; then
-	echo $newarch"已使用qemu-user 正在配置"
-	arch="$newarch"
-	qemu_command=" -q $qemu_user  -b /vendor -b /system -b /apex -b /data/dalvik-cache  -b $PREFIX "
-	qemu_command+=" -L --sysvipc"
-	qemu_command+=" --kill-on-exit"
-	qemu_command+=" --kernel-release=5.4.0-fake-kernel"
-	qemu_command+=" -b $linux/sys/fs/selinux/:/sys/fs/selinux"
-	qemu_command+=" -b $linux/tmp/:/dev/shm/"
-	qemu_command+=" -b /dev/urandom:/dev/random"
-	qemu_command+=" -b $linux/proc/.stat:/proc/stat"
-	qemu_command+=" -b $linux/proc/.loadavg:/proc/loadavg"
-	qemu_command+=" -b $linux/proc/.uptime:/proc/uptime"
-	qemu_command+=" -b $linux/proc/.version:/proc/version"
-	qemu_command+=" -b $linux/proc/.vmstat:/proc/vmstat"
-	if [ ! -x "$(command -v $qemu_user)" ]; then
-		apt update && apt upgrade -y &&
-			apt install -y qemu-user-*
-	fi
-	if [ ! -x "$(command -v $qemu_user)" ]; then
-		echo "找不到适配的$qemu_user"
-		exit 1
-	fi
-	echo $newarch"qemu-user 配置完成"
+        echo $newarch "is using qemu-user, configuring now"
+        arch="$newarch"
+        qemu_command=" -q $qemu_user  -b /vendor -b /system -b /apex -b /data/dalvik-cache  -b $PREFIX "
+        qemu_command+=" -L --sysvipc"
+        qemu_command+=" --kill-on-exit"
+        qemu_command+=" --kernel-release=5.4.0-fake-kernel"
+        qemu_command+=" -b $linux/sys/fs/selinux/:/sys/fs/selinux"
+        qemu_command+=" -b $linux/tmp/:/dev/shm/"
+        qemu_command+=" -b /dev/urandom:/dev/random"
+        qemu_command+=" -b $linux/proc/.stat:/proc/stat"
+        qemu_command+=" -b $linux/proc/.loadavg:/proc/loadavg"
+        qemu_command+=" -b $linux/proc/.uptime:/proc/uptime"
+        qemu_command+=" -b $linux/proc/.version:/proc/version"
+        qemu_command+=" -b $linux/proc/.vmstat:/proc/vmstat"
+        if [ ! -x "$(command -v $qemu_user)" ]; then
+                apt update && apt upgrade -y &&
+                        apt install -y qemu-user-*
+        fi
+        if [ ! -x "$(command -v $qemu_user)" ]; then
+                echo "Cannot find a compatible $qemu_user"
+                exit 1
+        fi
+        echo $newarch "qemu-user configuration completed"
 fi
 
 if ! [ -f ${linux}.tar.xz ]; then
-	if ! [ -f images.json ]; then
-		curl -O "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/streams/v1/images.json"
-	fi
-	#解析json
-	rootfs_url=$(cat images.json | awk -F '[,"}]' '{for(i=1;i<=NF;i++){ print $i}}' | grep "images/${linux}/" | grep "${linux_ver}" | grep "/${arch}/default/" | grep "rootfs.tar.xz" | awk 'END {print}')
-	echo "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/${rootfs_url}"
-	if [ $rootfs_url ]; then
-		echo "正在下载"
-		#wget -T 5 -t 0 -c -O ${linux}.tar.xz "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/${rootfs_url}"
-		curl -o ${linux}.tar.xz "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/${rootfs_url}"
-	else
-		echo "${linux} ${linux_ver} 版本无法找到，请重新确认输入"
-		exit 1
-	fi
+        if ! [ -f images.json ]; then
+                curl -O "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/streams/v1/images.json"
+        fi
+        #Parse JSON
+        rootfs_url=$(cat images.json | awk -F '[,"}]' '{for(i=1;i<=NF;i++){ print $i}}' | grep "images/${linux}/" | grep "${linux_ver}" | grep "/${arch}/default/" | grep "rootfs.tar.xz" | awk 'END {print}')
+        echo "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/${rootfs_url}"
+        if [ $rootfs_url ]; then
+                echo "Downloading"
+                #wget -T 5 -t 0 -c -O ${linux}.tar.xz "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/${rootfs_url}"
+                curl -o ${linux}.tar.xz "https://mirrors.tuna.tsinghua.edu.cn/lxc-images/${rootfs_url}"
+        else
+                echo "${linux} ${linux_ver} version not found, please check your input"
+                exit 1
+        fi
 fi
 if [ -d $linux ]; then
-	echo "安装中断，由于${linux}文件夹已存在，请清理后安装"
-	exit 1
+        echo "Installation interrupted, as the ${linux} folder already exists. Please clean up before installing"
+        exit 1
 fi
 
-echo "下载完成"
+echo "Download completed"
 
-echo "开始安装"
+echo "Starting installation"
 cur=$(pwd)
 mkdir -p "$linux"
 cd "$linux"
-echo "正在解压rootfs，请稍候"
+echo "Extracting rootfs, please wait"
 ${proot_command} tar -xJf ${cur}/${linux}.tar.xz --exclude='dev' --exclude='etc/rc.d' --exclude='usr/lib64/pm-utils'
 #proot --link2symlink tar -xJf ${cur}/${linux}.tar.xz --exclude='dev' --exclude='etc/rc.d' --exclude='usr/lib64/pm-utils'
-echo "更新DNS"
+echo "Updating DNS"
 echo "127.0.0.1 localhost" >etc/hosts
 rm -rf etc/resolv.conf &&
-	echo "nameserver 114.114.114.114" >etc/resolv.conf
+        echo "nameserver 114.114.114.114" >etc/resolv.conf
 echo "nameserver 8.8.4.4" >>etc/resolv.conf
 echo "export  TZ='Asia/Shanghai'" >>root/.bashrc
 
 if [ -n "$qemu_command" ]; then
-
-	echo "建立proc文件"
-	chmod 700 proc
-	echo "cpu  1050008 127632 898432 43828767 37203 63 99244 0 0 0
+        echo "Create proc file"
+        chmod 700 proc
+        echo "cpu  1050008 127632 898432 43828767 37203 63 99244 0 0 0
 cpu0 212383 20476 204704 8389202 7253 42 12597 0 0 0
 cpu1 224452 24947 215570 8372502 8135 4 42768 0 0 0
 cpu2 222993 17440 200925 8424262 8069 9 17732 0 0 0
@@ -273,10 +272,10 @@ processes 270853
 procs_running 2
 procs_blocked 0
 softirq 25293348 2883 7658936 40779 539155 497187 2864 1908702 7229194 279723 7133925" >proc/.stat
-	echo "0.54 0.41 0.30 1/931 370386" >proc/.loadavg
-	echo "284684.56 513853.46" >proc/.uptime
-	echo "Linux version 5.4.0-faked (termu) (gcc version 6.9.x (Faked /proc/version ) ) #1 SMP PREEMPT Sun May 11 11:11:11 UTC 2022" >proc/.version
-	echo "nr_free_pages 146031
+        echo "0.54 0.41 0.30 1/931 370386" >proc/.loadavg
+        echo "284684.56 513853.46" >proc/.uptime
+        echo "Linux version 5.4.0-faked (termu) (gcc version 6.9.x (Faked /proc/version ) ) #1 SMP PREEMPT Sun May 11 11:11:11 UTC 2022" >proc/.version
+        echo "nr_free_pages 146031
 nr_zone_inactive_anon 196744
 nr_zone_active_anon 301503
 nr_zone_inactive_file 2457066
@@ -415,65 +414,65 @@ balloon_migrate 0
 swap_ra 9661
 swap_ra_hit 7872" >proc/.vmstat
 
-	mkdir -p sys/fs/selinux
+        mkdir -p sys/fs/selinux
 fi
 
 cd "$cur"
 
 if [ $linux == "alpine" ]; then
-	echo "is sh"
-	bash_tmp="sh"
+        echo "is sh"
+        bash_tmp="sh"
 else
-	echo "is bash"
-	bash_tmp="bash"
+        echo "is bash"
+        bash_tmp="bash"
 fi
 
 if [ $linux == "ubuntu" ]; then
-	touch "${linux}/root/.hushlogin"
+        touch "${linux}/root/.hushlogin"
 fi
 bin=start-${linux}.sh
-echo "写入启动脚本"
+echo "Write startup script"
 cat >$bin <<-EOM
-	#!/bin/bash
-	cd \$(dirname \$0)
-	## unset LD_PRELOAD in case termux-exec is installed
-	unset LD_PRELOAD
-	command="$proot_command "
-	command+=" --link2symlink"
-	command+=" -0"
-	command+=" -r $linux"
+        #!/bin/bash
+        cd \$(dirname \$0)
+        ## unset LD_PRELOAD in case termux-exec is installed
+        unset LD_PRELOAD
+        command="$proot_command "
+        command+=" --link2symlink"
+        command+=" -0"
+        command+=" -r $linux"
 
-	command+=" $qemu_command "
-	command+=" -b /dev"
-	command+=" -b /proc"
-	command+=" -b $linux/root:/dev/shm"
-	## uncomment the following line to have access to the home directory of termux
-	#command+=" -b /data/data/com.termux/files/home:/root"
-	## uncomment the following line to mount /sdcard directly to / 
-	#command+=" -b /sdcard"
-	command+=" -w /root"
-	command+=" /usr/bin/env -i"
-	command+=" HOME=/root"
-	command+=" PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
-	command+=" TERM=\$TERM"
-	command+=" LANG=C.UTF-8"
-	command+=" /bin/$bash_tmp --login"
-	com="\$@"
-	if [ -z "\$1" ];then
-	    exec \$command
-	else
-	    \$command -c "\$com"
-	fi
+        command+=" $qemu_command "
+        command+=" -b /dev"
+        command+=" -b /proc"
+        command+=" -b $linux/root:/dev/shm"
+        ## uncomment the following line to have access to the home directory of termux
+        #command+=" -b /data/data/com.termux/files/home:/root"
+        ## uncomment the following line to mount /sdcard directly to /
+        #command+=" -b /sdcard"
+        command+=" -w /root"
+        command+=" /usr/bin/env -i"
+        command+=" HOME=/root"
+        command+=" PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
+        command+=" TERM=\$TERM"
+        command+=" LANG=C.UTF-8"
+        command+=" /bin/$bash_tmp --login"
+        com="\$@"
+        if [ -z "\$1" ];then
+            exec \$command
+        else
+            \$command -c "\$com"
+        fi
 EOM
 
 if [ -x "$(command -v termux-fix-shebang)" ]; then
-	echo "fixing shebang of $bin"
-	termux-fix-shebang $bin
+        echo "fixing shebang of $bin"
+        termux-fix-shebang $bin
 fi
-echo "授予 $bin 执行权限"
+echo "Grant execution permission to $bin"
 chmod +x $bin
-echo "正在删除镜像文件"
+echo "Deleting image file"
 #rm $linux.tar.xz
 #删除json
 #rm images.json
-echo "现在可以执行 ./${bin} 运行 ${linux} ${linux_ver} 了"
+echo "Now you can execute ./${bin} to run ${linux} ${linux_ver}"
