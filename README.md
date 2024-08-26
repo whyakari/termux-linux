@@ -3,7 +3,7 @@
 
 ## Overview
 This script allows you to run various Linux distributions on Termux using LXC containers. It supports distributions such as Alpine, Arch Linux, Ubuntu, Kali, CentOS, Debian, Fedora, and more. The script is designed to work with LXC images and can also use `proot` if root access is not available.
-termux run lxc-images (alpine、archlinux、ubuntu、kali、centos、debian、fedora....)
+termux run lxc-images (alpine, archlinux, ubuntu, kali, centos, debian, fedora...)
 
 ## Features
 - **LXC Support:** Install and run various Linux distributions in LXC containers.
